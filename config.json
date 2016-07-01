@@ -1,3 +1,5 @@
 {
-  "triggersPath":"D:/mIRC/PhotoServe/Triggers2/"
+  "triggersPath":"D:/mIRC/PhotoServe/Triggers/",
+  "redisHost":"192.168.1.101",
+  "redisPort":26379
 }
