@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "commander": "^2.9.0",
     "redis": "^2.6.2"
   }
 }
