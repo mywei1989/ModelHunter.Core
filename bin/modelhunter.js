@@ -6,26 +6,25 @@ var path = require('path');
 
 var dConfig = require('../config.json');
 
+
+
 const EventEmitter = require('events').EventEmitter;
 const ee = new EventEmitter();
 
 var config = require('../config.json');
 
 
-var DEFAULT_MASTER_HOST = '127.0.0.1';
-var DEFAULT_MASTER_PORT = 3005;
-
 var DEFAULT_TRG_PATH = config.triggersPath;
 
 var CUR_DIR = process.cwd();
 var DEFAULT_GAME_SERVER_DIR = CUR_DIR;
 
-program.command('start')
-  .description('start the application')
-  .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
-  .action(function(opts) {
-    start(opts);
-  });
+// program.command('start')
+//   .description('start the application')
+//   .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
+//   .action(function(opts) {
+//     start(opts);
+//   });
 
 program.command('create')
   .description('start create')
@@ -34,27 +33,34 @@ program.command('create')
     create(opts);
   });
 
-program.command('update')
-  .description('start update triggers')
-  .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
+program.command('read')
+  .description('start create')
   .action(function(opts) {
-    create(opts);
+    read(opts);
   });
+
+
+
+// program.command('update')
+//   .description('start update triggers')
+//   .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
+//   .action(function(opts) {
+//     create(opts);
+//   });
 
 program.parse(process.argv);
 
-function start(opts){
-  console.log(1111);
+
+function read(){
+  
 }
 
 
-var trgFilesList = [];
 
+var trgFilesList = [];
 var workers = [];
 function create(opts){
-
   var numWorkers = require('os').cpus().length;
-
   /*for(var i = 0;i<numWorkers;i++){
     workers.push()
   }*/
@@ -72,15 +78,13 @@ function create(opts){
     
   createPromise.then(function(trgFiles){
     trgFilesList = trgFiles;
-    for(var i=0;i<4;i++){
-      ee.emit('TRGListPop');
-    }
-    //ee.emit('TRGListPop');
+    // for(var i=0;i<4;i++){
+    //  ee.emit('TRGListPop');
+    // }
+
+    ee.emit('TRGListPop');
+    //console.log(trgFilesList)
   });
-}
-
-function update(opts){
-
 }
 
 ee.on('TRGListPop',function(){
@@ -95,36 +99,39 @@ ee.on('TRGHandle',function(trgFile){
   var absScript = path.resolve(process.cwd()+'/lib/', 'modelhunter.js');
 
   if(trgFile){
-    
-    //spawn
-    /*var child = child_process.spawn(process.argv[0],[absScript,'create','--path=' + dConfig.triggersPath + trgFile]);
+    // spawn
+    var child = child_process.spawn(process.argv[0],[absScript,'create','--path=' + dConfig.triggersPath + trgFile]);
     child.stdout.on('data', function(data){
       console.log(`${data}`);
     });
     child.stdout.on('end', function(){
-      console.log('end');
+      fs.appendFileSync(dConfig.logsPath+'end.log',dConfig.triggersPath + trgFile+'\n');
     });
     child.on('error', function(err){
-      console.log('Failed to start child process.');
+      //console.log('Failed to start child process.');
+      fs.appendFileSync(dConfig.logsPath+'error.log',dConfig.triggersPath + trgFile+'\n');
+      ee.emit('TRGListPop');
     });
     child.on('close',function(code){
-      console.log('closecode:'+ code);
-    });*/
-
-
-    //fork
-    var child = child_process.fork(absScript,['create','--path=' + dConfig.triggersPath + trgFile]);
-    /*child.on('message',function(m){
-      console.log('message:'+ m);
-    });*/
-    child.on('close',function(code){
+      //console.log('处理完成:'+dConfig.triggersPath + trgFile);
+      fs.appendFileSync(dConfig.logsPath+'close.log',dConfig.triggersPath + trgFile+'\n');
       ee.emit('TRGListPop');
     });
 
-    child.on('error',function(err){
-      console.log('err:'+err);
-    });
-    //child.send(dConfig.triggersPath + trgFile);
+
+    //fork
+    // var child = child_process.fork(absScript,['create','--path=' + dConfig.triggersPath + trgFile]);
+    // /*child.on('message',function(m){
+    //   console.log('message:'+ m);
+    // });*/
+    // child.on('close',function(code){
+    //   ee.emit('TRGListPop');
+    // });
+
+    // child.on('error',function(err){
+    //   console.log('err:'+err);
+    // });
+    // //child.send(dConfig.triggersPath + trgFile);
   }
   
 });
