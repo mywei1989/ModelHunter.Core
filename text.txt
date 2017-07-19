@@ -1,0 +1,12 @@
+
+node .\bin\modelhunter.js create
+node .\index.js read --name=aa
+
+section|Asian Websites - The Black Alley|TBADVD14
+
+Asian Websites - The Black Alley:subFolder:fileName
+
+
+
+cat test.txt | redis-cli.exe --pipe -h 192.168.1.101 -p 26379
+

@@ -1,0 +1,67 @@
+var child_process = require('child_process');
+var fs = require('fs');
+var os = require('os');
+var program = require('commander');
+
+const EventEmitter = require('events').EventEmitter;
+const ee = new EventEmitter();
+
+var config = require('../config.json');
+
+
+var DEFAULT_MASTER_HOST = '127.0.0.1';
+var DEFAULT_MASTER_PORT = 3005;
+
+var DEFAULT_TRG_PATH = config.triggersPath;
+
+program.command('start')
+  .description('start the application')
+  .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
+  .action(function(opts) {
+    start(opts);
+  });
+
+program.command('create')
+  .description('start create')
+  .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
+  .action(function(opts) {
+    create(opts);
+  });
+
+program.command('update')
+  .description('start update triggers')
+  .option('-d, --directory, <directory>', 'triggers path', DEFAULT_TRG_PATH)
+  .action(function(opts) {
+    create(opts);
+  });
+
+program.parse(process.argv);
+
+function start(opts){
+  console.log(1111);
+}
+
+
+var trgFilesList = [];
+
+var workers = [];
+function create(opts){
+  console.log(opts.directory);
+
+  var numWorkers = require('os').cpus().length;
+
+  /*for(var i = 0;i<numWorkers;i++){
+    //workers.push()
+  }
+  for(var i = 0;i<workers.length;i++){
+    //workers[i] = child_process.spawn(process.execPath, params);
+  }*/
+  console.log(process.execPath)
+  
+}
+
+function update(opts){
+
+}
+
+
